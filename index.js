@@ -1,7 +1,7 @@
 const fs = require("fs");
 var http = require("http");
 var url = require("url");
-
+var convertTemplate = require("./modules/convertHTML");
 const tempOverview = fs.readFileSync(
   `${__dirname}/templates/template-overview.html`,
   "utf-8"
@@ -19,23 +19,6 @@ const tempCard = fs.readFileSync(
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
-
-const convertTemplate = (temp, product) => {
-  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
-  output = output.replace(/{%PRODUCT_IMAGE%}/g, product.image);
-  output = output.replace(/{%PRODUCT_NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%DESCRIPTION%}/g, product.description);
-  output = output.replace(/{%ID%}/g, product.id);
-  output = output.replace(/{%FROM%}/g, product.from);
-
-  //not organic
-  if (!product.organic)
-    output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
-
-  return output;
-};
 
 const server = http.createServer((req, res) => {
   //console.log(req.url);
